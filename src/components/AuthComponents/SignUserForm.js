@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useMutation } from '@apollo/client';
 //Redux
-import { useDispatch } from "react-redux";
-import { CREATE_USER, LOGIN } from "../graphql/userRequests";
+import { CREATE_USER, LOGIN } from "../../graphql/userRequests";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {
     useNavigate,
 } from 'react-router-dom';
-import { setUserAuthInfo } from "../redux/appSlice";
+import Token from "../../utils/token";
 
 const SignUserForm = ({signInMode = false, signUpMode = false}) => {
   const [email, setEmail] = useState("");
@@ -16,37 +15,58 @@ const SignUserForm = ({signInMode = false, signUpMode = false}) => {
   const [name, setName] = useState("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
  
-  const [createUser] = useMutation(CREATE_USER, { variables: {input: {
-    email,
-    password,
-    name
-  }}});
+  const [createUser] = useMutation(CREATE_USER, { 
+    variables: {
+      input: {
+        email,
+        password,
+        name
+      }
+    },
+    context: {
+      clientName: "auth"
+    }
+  });
 
-  const [login, loginData] = useMutation(LOGIN, { variables: {input: {
-    email,
-    password
-  }}});
+  const [login, loginData] = useMutation(LOGIN, 
+    { 
+      variables: 
+      { 
+        input: {
+          email,
+          password
+  
+        }
+      },
+      context: {
+        clientName: "auth"
+      }
+    }
+  )
 
-
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (name && password && email && signUpMode) {
-      createUser().then(() => {
+      await createUser().then(() => {
         setName("")
         setEmail("")
         setPassword("")
-        navigate('/sing-in');
+        navigate('/sign-in');
       })
     } else if (password && email && signInMode) {
-        login()
-        console.log(loginData.data)
-        // dispatch(setUserAuthInfo(loginData.data.login))÷
+        await login().then(() => {
+          if (loginData.data && loginData.data.login && loginData.data.login.token) {
+            Token.setToken(loginData.data.login.token)
+            Token.setUser(loginData.data.login.userId)
+            navigate('/')
+          }
+        })
     } else {
         alert("Not all fildes was filled")
     }
   };
+
 
   return (
     <form onSubmit={onSubmit}>

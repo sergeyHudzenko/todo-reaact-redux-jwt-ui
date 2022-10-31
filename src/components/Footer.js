@@ -21,13 +21,13 @@ const Footer = () => {
                     Show:
                 </Grid>
                 <Grid item xs={1}>
-                    <button type="button" className={todoType === todoViewType.ALL && 'active'} onClick={() => switchTodoView(todoViewType.ALL)}>All</button>
+                    <button type="button" className={todoType === todoViewType.ALL ? 'active' : ''} onClick={() => switchTodoView(todoViewType.ALL)}>All</button>
                 </Grid>
                 <Grid item xs={3}>
-                    <button type="button" className={todoType === todoViewType.COMPLETED && 'active'} onClick={() => switchTodoView(todoViewType.COMPLETED)}>Completed</button>
+                    <button type="button" className={todoType === todoViewType.COMPLETED ? 'active' : ''} onClick={() => switchTodoView(todoViewType.COMPLETED)}>Completed</button>
                 </Grid>
                 <Grid item xs={2}>
-                    <button type="button" className={todoType === todoViewType.INCOMPLETED && 'active'} onClick={() => switchTodoView(todoViewType.INCOMPLETED)}>Incompleted</button>
+                    <button type="button" className={todoType === todoViewType.INCOMPLETED ? 'active' : ''} onClick={() => switchTodoView(todoViewType.INCOMPLETED)}>Incompleted</button>
                 </Grid>
             </Grid>
         </section>

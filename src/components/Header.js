@@ -1,4 +1,4 @@
-import SingModule from "./SingModule";
+import SingModule from "./AuthComponents/SingModule";
 
 const Header = () => {
   return (

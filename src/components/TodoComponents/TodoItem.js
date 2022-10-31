@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useMutation } from '@apollo/client';
 import Checkbox from '@mui/material/Checkbox';
@@ -6,8 +6,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import Grid from "@mui/material/Grid";
 //Redux
 import { useDispatch } from "react-redux";
-import { deleteItem, markComplete } from "../redux/todoSlice";
-import { CHANGE_TODO_STATUS, REMOVE_TODO } from "../graphql/todoListRequests";
+import { deleteItem, markComplete } from "../../redux/todoSlice";
+import { CHANGE_TODO_STATUS, REMOVE_TODO } from "../../graphql/todoListRequests";
 
 const TodoItem = ({ id, title, status }) => {
   const dispatch = useDispatch();
@@ -31,9 +31,11 @@ const TodoItem = ({ id, title, status }) => {
     dispatch(deleteItem({ id }));
     setActive(false)
   };
+
+  useEffect(() => {
+    setActive(status === "completed")
+  }, [status])
   return (
-    <>
-      {isActive ? (
         <li className="todo-item status">
          <Grid container width={100+"%"} direction="row"
                   justifyContent="center"
@@ -41,6 +43,7 @@ const TodoItem = ({ id, title, status }) => {
                   >
                 <Grid item xs={2}>
                   <Checkbox  
+                    key={id}
                      checked={isActive}
                     onClick={() => {
                       markCompleteds();
@@ -58,32 +61,6 @@ const TodoItem = ({ id, title, status }) => {
                 </Grid>
           </Grid>
         </li>
-      ) : (
-        <li className="todo-item">
-            <Grid container width={100+"%"} direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  >
-                <Grid item xs={2}>
-                  <Checkbox  
-                    onClick={() => {
-                      markCompleteds();
-                    }} />
-                </Grid>
-                <Grid item xs={9}>
-                 <p>{title}</p>
-                </Grid>
-                <Grid item xs={1}>
-                  <section>
-                  <CloseIcon className="close-icon" onClick={() => {
-                      deleteAction();
-                    }}/>
-                </section>
-                </Grid>
-          </Grid>
-        </li>
-      )}
-    </>
   );
 };
 

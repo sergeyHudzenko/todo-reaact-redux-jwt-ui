@@ -7,14 +7,33 @@ import App from "./App";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import { createRoot } from 'react-dom/client';
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import { ApolloLink } from "apollo-link";
+import {ApolloClient, InMemoryCache, ApolloProvider, HttpLink} from '@apollo/client';
+import hasJWT from './utils/checkJwt';
+import RouteGuard from "./components/RouteGuard";
+import Token from "./utils/token";
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-const client = new ApolloClient({
+const mainResourse = new HttpLink({
   uri: 'http://localhost:4000',
-  cache: new InMemoryCache()
+  headers: {
+    Authorization: hasJWT() ? `Bearer ${Token.getToken()}` : ''
+  }
+});
+
+const authResourse = new HttpLink({
+  uri: 'http://localhost:4000/auth'
+});
+
+const client = new ApolloClient({
+  link: ApolloLink.split(
+    operation => operation.getContext().clientName === "auth",
+    authResourse,
+    mainResourse
+  ),
+  cache: new InMemoryCache(),
 });
 
 root.render(
@@ -23,9 +42,39 @@ root.render(
       <Router>
         <Provider store={store}>
           <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/sign-up" element={<App signUpMode={true} />} />
-            <Route path="/sign-in" element={<App signInMode={true} />} />
+            <Route 
+              path="/" 
+              element={
+                <RouteGuard
+                  jwtRequired={true}
+                  navigateTo='/sign-in'
+                >
+                  <App />
+                </RouteGuard>
+              }
+            />
+            <Route 
+              path="/sign-in" 
+              element={
+                <RouteGuard
+                  jwtRequired={false}
+                  navigateTo='/'
+                >
+                  <App signInMode={true} />
+                </RouteGuard>
+              }
+            />
+            <Route 
+              path="/sign-up" 
+              element={
+                <RouteGuard
+                  jwtRequired={false}
+                  navigateTo='/'
+                >
+                  <App signUpMode={true} />
+                </RouteGuard>
+              }
+            />
           </Routes>
         </Provider>
       </Router>
