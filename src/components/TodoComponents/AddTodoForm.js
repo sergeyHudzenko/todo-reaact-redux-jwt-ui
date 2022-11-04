@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { useMutation } from '@apollo/client';
 //Redux
 import { useDispatch } from "react-redux";
-import { ADD_TODO } from "../graphql/todoListRequests";
-import { addTodo } from "../redux/todoSlice";
+import { ADD_TODO } from "../../graphql/todoListRequests";
+import { addTodo } from "../../redux/todoSlice";
 import TextField from "@mui/material/TextField";
+import Token from "../../utils/token";
 
 const AddTodoForm = () => {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
  
   const [addingTodo] = useMutation(ADD_TODO, { variables: {input: {
-    userId: 5,
+    userId: Token.getUser(),
     title: value
   }}});
 

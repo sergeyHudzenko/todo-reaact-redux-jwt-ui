@@ -30,7 +30,7 @@ export const todoSlice = createSlice({
       state.todos[index].status = action.payload.status;
     },
     deleteItem: (state, action) => {
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
+       state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
     },
   },
 });

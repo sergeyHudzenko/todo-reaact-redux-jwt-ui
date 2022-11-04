@@ -1,4 +1,10 @@
 
+
+https://user-images.githubusercontent.com/78405544/198919799-c6de97a8-f9d3-4ecb-92f1-f39446f70834.mov
+
+
+
+
 <img width="1299" alt="Снимок экрана 2022-10-28 в 18 46 31" src="https://user-images.githubusercontent.com/78405544/198682174-6642f983-c5aa-4fff-934c-6a7b17a2ce5d.png">
 <img width="1299" alt="Снимок экрана 2022-10-28 в 18 47 01" src="https://user-images.githubusercontent.com/78405544/198682207-b026040b-fae1-4871-b6fe-4a1eac8e090c.png">
 <img width="1299" alt="Снимок экрана 2022-10-28 в 18 41 17" src="https://user-images.githubusercontent.com/78405544/198682220-f717421b-a920-448d-a7f3-a5851d5f28a3.png">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import AddTodoForm from "./components/AddTodoForm";
-import SignUserForm from "./components/SignUserForm";
-import TodoList from "./components/TodoList";
+import AddTodoForm from "./components/TodoComponents/AddTodoForm";
+import SignUserForm from "./components/AuthComponents/SignUserForm";
+import TodoList from "./components/TodoComponents/TodoList";
 import Header  from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -12,25 +12,19 @@ import { GET_TODOS_BY_USER, GET_TODOS_BY_STATUS } from './graphql/todoListReques
 import { uploadTodo } from "./redux/todoSlice";
 import { useDispatch } from "react-redux";
 import logo from "./assets/group.svg"
-import { isAuthenticated } from "./utils/auth";
+import Token from "./utils/token";
 
 const App = ({signInMode = false, signUpMode = false}) => {
   const appStore = useSelector((state) => state.app);
   const [ todos, setTodos ] = useState([])
-  const [auth, setAuth] = useState(false)
   const dispatch = useDispatch()
-  const accessToken = appStore.userAuth.token;
-
-  useEffect(() => {
-    setAuth(isAuthenticated(accessToken))
-  })
-
+  
   const todosQuery = appStore.todoViewType === "all" ? GET_TODOS_BY_USER : GET_TODOS_BY_STATUS
   const status = appStore.todoViewType === "all" ? undefined : appStore.todoViewType
 
   const {loading, data} = useQuery(todosQuery, {
     variables: {
-      id: 5,
+      id: Token.getUser(),
       status
     }
   });
@@ -47,7 +41,7 @@ const App = ({signInMode = false, signUpMode = false}) => {
       <Header />
       <main>
         <section className="todo-section">
-          <img className="logo" src={logo} />
+          <img className="logo" src={logo} alt="logo" />
           
           {(signUpMode || signInMode) ? (
             <>
@@ -56,15 +50,10 @@ const App = ({signInMode = false, signUpMode = false}) => {
             </>
           ) : (
             <>
-              {auth ? (<h3>You need to be authentificated</h3>) : (
-                <>
-                <h3>Todo List</h3>
-                <AddTodoForm />
-                <TodoList />
-                <Footer />
-                </>
-              ) }
-              
+              <h3>Todo List</h3>
+              <AddTodoForm />
+              <TodoList />
+              <Footer />
             </>
           )}
         </section>

@@ -9,11 +9,7 @@ export const todoViewType = {
 export const appSlice = createSlice({
   name: "app",
   initialState: {
-    todoViewType: todoViewType.ALL,
-    userAuth: {
-        userId: null,
-        token: null
-    }
+    todoViewType: todoViewType.ALL
   },
   reducers: {
     switchTodoViewType: (state, action) => {
@@ -33,13 +29,9 @@ export const appSlice = createSlice({
 
         state.todoViewType = type
     }
-  },
-  setUserAuthInfo: (state, action) => {
-    state.userAuth.userId = action.data.userId
-    state.userAuth.token = action.data.token
   }
 });
 
-export const { switchTodoViewType, setUserAuthInfo } = appSlice.actions;
+export const { switchTodoViewType } = appSlice.actions;
 
 export default appSlice.reducer;
